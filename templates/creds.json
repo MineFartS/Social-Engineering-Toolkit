@@ -3,58 +3,8 @@
         "email": "",
         "password": "",
         "type": "",
-        "timestamp": "2025-08-02 16:56:49"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "qerr",
-        "type": "adobe",
-        "timestamp": "2025-08-02 16:57:03"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "wrtert",
-        "type": "instagram",
-        "timestamp": "2025-08-02 17:06:28"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "434t",
-        "type": "instagram",
         "ip": "192.168.0.7",
         "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36",
-        "timestamp": "2025-08-02 17:07:54"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "sdsd",
-        "type": "instagram",
-        "ip": "192.168.0.7",
-        "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36",
-        "timestamp": "2025-08-02 17:30:10"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "sdsd",
-        "type": "instagram",
-        "ip": "192.168.0.7",
-        "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36",
-        "timestamp": "2025-08-02 17:30:30"
-    },
-    {
-        "email": "4rt45t",
-        "password": "34tt",
-        "type": "instagram",
-        "ip": "192.168.0.7",
-        "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36",
-        "timestamp": "2025-08-02 17:31:05"
-    },
-    {
-        "email": "cijel58376@dekpal.com",
-        "password": "sdsd",
-        "type": "instagram",
-        "ip": "192.168.0.7",
-        "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36",
-        "timestamp": "2025-08-02 17:34:15"
+        "timestamp": "2025-08-02 18:50:11"
     }
 ]

