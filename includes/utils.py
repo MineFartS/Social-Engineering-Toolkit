@@ -29,6 +29,7 @@ from rich.panel import Panel
 from datetime import datetime
 import os
 import json
+import socket
 from shutil import which
 import subprocess
 
@@ -48,17 +49,22 @@ def kill_port(port):
         pass  # No process is using the port
 
 
-def get_wifi_interfaces():
-    import subprocess
-    result = subprocess.run(["iw", "dev"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
-    interfaces = []
-    for line in result.stdout.splitlines():
-        line = line.strip()
-        if line.startswith("Interface"):
-            iface = line.split()[1]
-            interfaces.append(iface)
-    return interfaces
+def getip():
+    try:
+        # Connect to an external IP (doesn't have to be reachable)
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))  # Google's DNS
+        ip = s.getsockname()[0]
+        s.close()
 
+        # Check for 192 or fallback to 172
+        if ip.startswith("192.") or ip.startswith("172."):
+            return ip
+    except Exception:
+        pass
+
+    return "127.0.0.1"  # fallback if nothing works
+    
 
 
 def choose_template():

