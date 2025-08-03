@@ -27,9 +27,9 @@ import sys
 from includes import banner
 from includes import utils
 from includes.menu import main_menu
-from includes import dynamic_url
 from includes import config_status
 from AttackModes import phishing
+from AttackModes import otpboming
 from rich.console import Console
 from rich.panel import Panel
 import os
@@ -59,8 +59,22 @@ def main():
             if selected_template:
                 phishing.pish(selected_template)
 
+                
+
             else:
                 print("🔙 Returning to main menu...")
+        elif choice == 2:
+            banner.clear
+            banner.show_banner()
+            country_code, mobile_no, otpcount = otpboming.sendotp()
+            banner.clear
+            banner.show_banner()
+            otpboming.attack(country_code, mobile_no, otpcount)
+            time.sleep(10)
+
+
+
+
             
            
         else:
