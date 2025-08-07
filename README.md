@@ -4,7 +4,7 @@
 
 A powerful social engineering toolkit that automates phishing, OTP/email bombing, fake mail, and more — built with ❤️ by [@karthithehacker](https://karthithehacker.com)
 
-![Main Menu](./images/social_engineer_menu.png)
+![Main Menu](https://raw.githubusercontent.com/karthi-the-hacker/SocialEngineer/refs/heads/main/images/social-engineer.png)
 
 > ⚠️ For educational use only. Do **not** use this tool against anyone without explicit permission.
 
