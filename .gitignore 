@@ -34,3 +34,7 @@ venv/
 
 # System files
 Thumbs.db
+
+*.json
+.json
+keylogger/keylogger.json

