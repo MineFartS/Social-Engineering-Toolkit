@@ -3,9 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pyc
-*.json
+
 # C extensions
 *.so
+
+# JSON (sensitive templates/configs/logs)
+*.json
+# If you prefer to ignore only specific json files, comment the line above and use:
+# keylogger.json
+# creds.json
+# keylogger/keylogger.json
 
 # Distribution / packaging
 build/
@@ -34,7 +41,3 @@ venv/
 
 # System files
 Thumbs.db
-
-*.json
-.json
-keylogger/keylogger.json

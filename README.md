@@ -2,7 +2,7 @@
 
 # SOCIAL ENGINEER 🎯🕵️‍♂️
 
-A powerful social engineering toolkit that automates phishing, OTP/email bombing, fake mail, and more — built with ❤️ by [@karthithehacker](https://karthithehacker.com)
+A powerful social engineering toolkit that automates phishing, OTP/email bombing, fake mail,IP changing and more — built with ❤️ by [@karthithehacker](https://karthithehacker.com)
 
 ![Main Menu](https://raw.githubusercontent.com/karthi-the-hacker/SocialEngineer/refs/heads/main/images/social-engineer.png)
 
@@ -17,6 +17,7 @@ A powerful social engineering toolkit that automates phishing, OTP/email bombing
 * 🎹 **Keylogger** – Capture user keystrokes
 * 📧 **Email Bombing** – Mass email sending to disrupt inboxes
 * ✉️ **Send Fake Email** – Custom spoofed email sender
+* 🕵️ **IP Changer** – Change IP automatically
 * ❌ **Quit** – Exit the toolkit gracefully
 
 ---
@@ -30,6 +31,9 @@ A powerful social engineering toolkit that automates phishing, OTP/email bombing
   * `rich`
   * `colorama`
   * `dnspython`
+  * `stem `
+  * `requests `
+  * `pysocks`
 
 Install them with:
 
@@ -48,7 +52,8 @@ Social-Engineer/
 │   ├── keylogger.py
 │   ├── otpboming.py
 │   ├── spfattack.py
-│   └── emailboming.py
+│   ├── emailboming.py
+|   └── ipchanger.py
 ├── includes/
 │   ├── banner.py
 │   ├── config_status.py
@@ -89,7 +94,7 @@ sudo python3 SocialEngineer.py
 
 ```text
 
-                                                                                                    v1.0
+                                                                                                    v2.0
 
 ███████╗ ██████╗  ██████╗██╗ █████╗ ██╗         ███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗███████╗██████╗ 
 ██╔════╝██╔═══██╗██╔════╝██║██╔══██╗██║         ██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║██╔════╝██╔════╝██╔══██╗
@@ -110,11 +115,26 @@ sudo python3 SocialEngineer.py
 │ 3   │ 🎹 Keylogger             │
 │ 4   │ 📩 Email Bombing         │
 │ 5   │ 📧 Send Fake Email       │
+│ 6   │ 🕵️ IP Changer            │
 │ 0   │ ❌ Quit                  │
 └─────┴──────────────────────────┘
-
 👉 Select an option: 
 ```
+
+## 🤩 New Feature (IP Changer)
+
+
+| Connect to              | Command / Steps                                                                                                                   | Description                                                           |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `Chromium`              | `chromium --proxy-server="socks5://127.0.0.1:9050"`                                                                               | **Launch Chromium with SOCKS5 proxy enabled.**                        |
+| `Chrome`                | `chrome --proxy-server="socks5://127.0.0.1:9050"`                                                                                 | **Launch Google Chrome with SOCKS5 proxy.**                           |
+| `Firefox`               | Settings → Preferences → Network Settings → Manual Proxy → SOCKS Host: `127.0.0.1`, Port: `9050`, SOCKS v5 → Enable **Proxy DNS** | **Configure Firefox via UI to use SOCKS5 proxy.**                     |
+| `Linux (system-wide)`   | `export ALL_PROXY="socks5h://127.0.0.1:9050"`                                                                                     | **Set proxy for terminal apps (per session).**                        |
+| `Linux (proxychains)`   | Add `socks5 127.0.0.1 9050` to `/etc/proxychains.conf` → Run: `proxychains4 <command>`                                            | **Force any app to use SOCKS5 proxy.**                                |
+| `macOS (system-wide)`   | `sudo networksetup -setsocksfirewallproxy "Wi-Fi" 127.0.0.1 9050`                                                                 | **Apply SOCKS5 proxy to Wi-Fi network.**                              |
+| `Windows (system-wide)` | Use **Proxifier** / **ProxyCap** → Add Proxy: `127.0.0.1:9050` (SOCKS5) → Apply Rules                                             | **Windows GUI doesn’t support SOCKS globally, requires helper tool.** |
+
+
 
 
 ## 📝 Notes

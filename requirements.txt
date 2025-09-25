@@ -2,3 +2,6 @@ requests
 dnspython
 rich
 colorama
+stem 
+requests 
+pysocks

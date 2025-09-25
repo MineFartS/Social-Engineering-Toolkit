@@ -45,6 +45,7 @@ def main_menu():
         table.add_row("3", "🎹 Keylogger")
         table.add_row("4", "📩 Email Bombing")
         table.add_row("5", "📧 Send Fake Email")
+        table.add_row("6", "🕵️  IP Changer")
         table.add_row("0", "❌ Quit")
         console.print(table)
         return IntPrompt.ask("\n👉 Select an option")

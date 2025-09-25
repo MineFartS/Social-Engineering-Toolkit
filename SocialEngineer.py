@@ -33,6 +33,7 @@ from AttackModes import keylogger
 from AttackModes import spfattack
 from AttackModes import otpboming
 from AttackModes import emailboming
+from AttackModes import ipchanger 
 from rich.console import Console
 from rich.panel import Panel
 import os
@@ -133,6 +134,7 @@ def main():
                 banner.clear
                 banner.show_banner()
                 spf = spfattack.check_spf(emailid)
+                print(spf)
                 if spf and spf == "Vulnerable to spoofing":
                     console.print(Panel.fit(
                         f"[bold green]✅ SPF Check Completed![/bold green]\n\n"
@@ -171,7 +173,24 @@ def main():
                     input("🔙 Returning to main menu...")
             else:
                 print("🔙 Returning to main menu...")
+        elif choice == 6:
+            banner.clear
+            status = ipchanger.start_tor_service()
+            if status == True:
+                banner.show_banner()
+                banner.ipc_banner()
+                banner.ipchanger_instructions()
+                sec = ipchanger.get_sec()              
+                if isinstance(sec, int):
+                    ipchanger.start(sec)
+                elif sec == "exit":
+                    print("🔙 Returning to main menu...")
+            
 
+        elif choice == 0:
+            banner.bye()
+            sys.exit(0)
+            
         else:
             banner.not_implemented()
 

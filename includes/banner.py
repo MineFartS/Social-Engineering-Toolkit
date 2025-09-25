@@ -40,7 +40,7 @@ def clear():
 def show_banner():
     os.system("clear")
     ascii_art = """
-                                                                                                    v1.0
+                                                                                                    v2.0
 
 ███████╗ ██████╗  ██████╗██╗ █████╗ ██╗         ███████╗███╗   ██╗ ██████╗ ██╗███╗   ██╗███████╗███████╗██████╗ 
 ██╔════╝██╔═══██╗██╔════╝██║██╔══██╗██║         ██╔════╝████╗  ██║██╔════╝ ██║████╗  ██║██╔════╝██╔════╝██╔══██╗
@@ -135,3 +135,14 @@ def show_wifi_targets(wifi_targets):
     panel_content = "\n".join(menu)
     
     console.print(Panel.fit(panel_content, title="[bold green]Choose Target[/bold green]", style="bold green"))
+
+
+
+def ipc_banner():
+    console.print(Panel.fit(
+        "[bold green]IP Changer[/bold green]",
+        border_style="red"
+    ))
+
+def ipchanger_instructions(): 
+     console.print(Panel.fit( "[bold yellow]IP Changer Instructions[/bold yellow]\n\n" "👉 This tool uses the Tor service to change your public IP.\n" "👉 Enter the interval in seconds for IP rotation (minimum 5 seconds).\n" "👉 During IP change, Tor may throw errors depending on your network or machine configuration.\n" "👉 Use this tool only for educational purposes.\n" "👉 To use in a browser, configure the proxy in Firefox with [bold]IP: 127.0.0.1[/bold] and [bold]Port: 9050[/bold].\n" "❌ Enter [red]'x'[/red] to exit anytime.", border_style="magenta" ))
