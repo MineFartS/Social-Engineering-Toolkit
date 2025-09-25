@@ -39,6 +39,7 @@ Install them with:
 
 ```bash
 pip install -r requirements.txt
+sudo apt install tor -y
 ```
 
 ---
@@ -76,12 +77,15 @@ Social-Engineer/
 ```bash
 git clone https://github.com/karthi-the-hacker/SocialEngineer.git
 cd SocialEngineer
+
 ```
 
 2. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+chmod +x install.sh
+sudo ./insatll.sh
 ```
 
 3. Run the tool:
