@@ -34,6 +34,7 @@ A powerful social engineering toolkit that automates phishing, OTP/email bombing
   * `stem `
   * `requests `
   * `pysocks`
+  * `pyngrok`
 
 Install them with:
 
