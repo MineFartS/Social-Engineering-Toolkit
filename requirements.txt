@@ -5,3 +5,4 @@ colorama
 stem 
 requests 
 pysocks
+pyngrok
