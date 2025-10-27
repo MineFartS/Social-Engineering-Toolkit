@@ -1,6 +1,8 @@
-import shutil
-import subprocess
-import sys
+"""
+Original Author : https://github.com/karthi-the-hacker
+Fork Author     : https://github.com/minefarts
+"""
+import shutil, subprocess, sys
 from colorama import Fore, Style, init
 
 init(autoreset=True)

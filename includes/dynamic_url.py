@@ -1,5 +1,8 @@
+"""
+Original Author : https://github.com/karthi-the-hacker
+Fork Author     : https://github.com/minefarts
+"""
 from pyngrok import ngrok
 
 def re_url():
-    public_url = ngrok.connect(80)
-    return public_url.public_url
+    return ngrok.connect(80).public_url
